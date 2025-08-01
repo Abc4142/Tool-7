@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Discover trending content ideas with the Content Trending Tool. Export ideas, switch themes, and stay creative.">
+  <meta name="keywords" content="Content Trending Tool, Trending Topics, Blogging Ideas, Export, Dark Mode, CSV, SEO">
+  <meta name="author" content="Your Name">
+  <title>📈 Content Trending Tool</title>
+  <style>
+    :root {
+      --bg: #f9f9f9;
+      --text: #222;
+      --primary: #4caf50;
+      --secondary: #2196f3;
+      --card: #ffffff;
+    }
+
+    body.dark {
+      --bg: #1e1e1e;
+      --text: #f5f5f5;
+      --primary: #81c784;
+      --secondary: #64b5f6;
+      --card: #2c2c2c;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      transition: all 0.3s ease;
+    }
+
+    header {
+      background-color: var(--primary);
+      color: white;
+      text-align: center;
+      padding: 2rem;
+      border-bottom: 4px solid #388e3c;
+    }
+
+    .tool-section {
+      padding: 2rem;
+      text-align: center;
+    }
+
+    input[type="text"] {
+      width: 80%;
+      max-width: 400px;
+      padding: 10px;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    button {
+      padding: 10px 15px;
+      font-size: 0.95rem;
+      border: none;
+      margin: 4px;
+      background-color: var(--secondary);
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #1976d2;
+    }
+
+    #results {
+      margin-top: 2rem;
+      text-align: left;
+      max-width: 600px;
+      margin: 2rem auto;
+      background: var(--card);
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ccc;
+    }
+
+    .ads {
+      text-align: center;
+      padding: 1rem;
+      background: var(--card);
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background: #eeeeee;
+      color: #222;
+      margin-top: 2rem;
+    }
+
+    .theme-toggle {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+    <h1>📈 Content Trending Tool</h1>
+    <p>Get trending content ideas + Export + Dark Mode</p>
+  </header>
+
+  <main>
+    <section class="tool-section">
+      <input type="text" id="topicInput" placeholder="Enter keyword or niche (e.g. travel, fitness)" />
+      <div>
+        <button onclick="generateTrends()">🔍 Get Trends</button>
+        <button onclick="copyTrends()">📋 Copy All</button>
+        <button onclick="downloadTrends('txt')">⬇️ Export .txt</button>
+        <button onclick="downloadTrends('csv')">⬇️ Export .csv</button>
+      </div>
+      <div id="results"></div>
+    </section>
+  </main>
+
+  <div class="ads">
+    <!-- Add AdSense code here -->
+    <p>[AdSpace]</p>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Content Trending Tool | Open Source | Dark Mode Enabled</p>
+  </footer>
+
+  <script>
+    let currentTrends = [];
+
+    function generateTrends() {
+      const input = document.getElementById("topicInput").value.trim();
+      const resultsDiv = document.getElementById("results");
+      resultsDiv.innerHTML = "";
+
+      if (!input) {
+        resultsDiv.innerHTML = "<p>Please enter a keyword.</p>";
+        return;
+      }
+
+      currentTrends = [
+        `Top 10 ${input} trends in 2025`,
+        `How ${input} is transforming industries`,
+        `The future of ${input}: What to expect`,
+        `${input} influencers to follow today`,
+        `Best tools for ${input} experts`,
+        `Beginner's guide to ${input}`,
+        `How AI is impacting ${input}`,
+        `Latest news in ${input}`,
+        `Mistakes to avoid in ${input}`,
+        `Grow your ${input} brand online`
+      ];
+
+      let output = "<h3>🔥 Trending Content Ideas:</h3><ul>";
+      currentTrends.forEach(trend => {
+        output += `<li>${trend}</li>`;
+      });
+      output += "</ul>";
+
+      resultsDiv.innerHTML = output;
+    }
+
+    function downloadTrends(type) {
+      if (!currentTrends.length) return alert("No content to export.");
+      let content = "";
+
+      if (type === "txt") {
+        content = currentTrends.join("\n");
+        saveToFile(content, "trending-ideas.txt", "text/plain");
+      } else if (type === "csv") {
+        content = "Trending Ideas\n" + currentTrends.join("\n");
+        saveToFile(content, "trending-ideas.csv", "text/csv");
+      }
+    }
+
+    function saveToFile(content, filename, type) {
+      const blob = new Blob([content], { type });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = filename;
+      link.click();
+    }
+
+    function copyTrends() {
+      if (!currentTrends.length) return alert("Nothing to copy.");
+      navigator.clipboard.writeText(currentTrends.join("\n"))
+        .then(() => alert("Copied to clipboard!"))
+        .catch(() => alert("Copy failed."));
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle("dark");
+      const icon = document.querySelector('.theme-toggle');
+      icon.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
+    }
+  </script>
+</body>
+</html>
